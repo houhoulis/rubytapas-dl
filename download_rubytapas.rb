@@ -79,7 +79,7 @@ feed_episodes.each do |episode|
       end
     end
 
-    fetcher = FetchesURI.new link.download_url, $username, $password
+    fetcher = FetchesURI.new URI.encode(link.download_url), $username, $password
     notifier = DownloadProgressNotifier.new(target_file)
     FetchesEpisode.download target: target_file,
       fetcher: fetcher,
