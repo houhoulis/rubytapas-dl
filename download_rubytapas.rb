@@ -60,21 +60,22 @@ feed_episodes = Tapas.new(feed.body)
 feed_episodes.each do |episode|
   target_dir = $target_path.join(episode.directory_name)
 
-  target_dir.mkdir unless target_dir.exist?
-  unless target_dir.directory?
-    warn "#{target_dir} is not a directory, skipping"
-    next
+  if target_dir.exist?
+    warn "\nDirectory '#{episode.directory_name}' exists.  Assumption: episode already downloaded.  Stopping."
+    break
+  else
+    target_dir.mkdir
   end
 
   episode.files.each do |link|
     target_file = target_dir.join(link.filename)
     if target_file.exist?
       if options[:recent]
-        warn "#{link.filename} already downloaded, stopping"
+        warn "\n#{link.filename} already downloaded, stopping"
         puts "Done updating."
         exit
       else
-        warn "#{link.filename} already downloaded, skipping"
+        warn "\n#{link.filename} already downloaded, skipping"
         next
       end
     end
